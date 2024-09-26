@@ -25,7 +25,7 @@ fn main() {
 
     println!("Meganes: {:?}", &meganes);
     loop {
-        println!("Input expr to be used");
+        println!("Input expr to be processing");
         let inputed = rl.readline("> ").unwrap().trim().to_string();
         if inputed.is_empty() {
             break;
@@ -50,16 +50,17 @@ fn search(meganes: &Vec<Megane>, target: Vec<String>) -> Option<Megane> {
 
 fn watch(mut expr: Vec<String>, meganes: &Vec<Megane>) -> Option<String> {
     while expr.len() > 1 {
-        println!("Log: {:?}", &expr);
         let mut index = expr.len();
         while index > 1 {
             if let Some(matched) = search(meganes, expr.get(..index)?.to_vec()) {
+                print!("Log: {:?}　-> ", &expr);
                 expr = expr
                     .join("\0")
                     .replace(&expr[..index].join("\0"), &matched.after)
                     .split("\0")
                     .map(|s| s.to_string())
                     .collect::<Vec<String>>();
+                println!("{:?}", &expr);
                 break;
             }
             index -= 1;
