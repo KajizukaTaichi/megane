@@ -61,12 +61,7 @@ fn watch(mut expr: Vec<String>, meganes: &Vec<Megane>) -> Option<String> {
         while index <= expr.len() {
             if let Some(matched) = search(meganes, expr.get(..index)?.to_vec()) {
                 print!("Log: {:?}　-> ", &expr);
-                expr = expr
-                    .join("\0")
-                    .replace(&expr[..index].join("\0"), &matched.after)
-                    .split("\0")
-                    .map(|s| s.to_string())
-                    .collect::<Vec<String>>();
+                expr = [vec![matched.after], expr[index..].to_vec()].concat();
                 println!("{:?}", &expr);
                 is_solution = true;
                 break;
