@@ -2,18 +2,13 @@ use rustyline::DefaultEditor;
 
 fn main() {
     println!("Megane: array-oriented computing model");
+    println!("(c) 2024 梶塚太智 All rights reversed.\n");
     let mut rl = DefaultEditor::new().unwrap();
 
     println!("Input data to be used");
-    let mut data = vec![];
-    loop {
-        let inputed = rl.readline("> ").unwrap().trim().to_string();
-        if inputed.is_empty() {
-            break;
-        }
-        data.push(inputed);
-    }
-    dbg!(&data);
+    let inputed = rl.readline("> ").unwrap().trim().to_string();
+    let data = inputed.split_whitespace().map(|s| s.to_string()).collect();
+    println!("Data: {:?}", &data);
 
     println!("Input meganes to processing the data");
     let mut meganes = vec![];
@@ -22,7 +17,7 @@ fn main() {
         if inputed.is_empty() {
             break;
         }
-        let inputed: Vec<&str> = inputed.split(":").collect();
+        let inputed: Vec<&str> = inputed.split("=").collect();
         meganes.push(Megane {
             before: inputed[0]
                 .trim()
@@ -32,10 +27,10 @@ fn main() {
             after: inputed[1].trim().to_string(),
         });
     }
-    dbg!(&meganes);
+    println!("Meganes: {:?}", &meganes);
 
-    let result = watch(data, &meganes);
-    dbg!(result);
+    let result = watch(data, &meganes).unwrap();
+    println!("Result: {:?}", result);
 }
 
 #[derive(Clone, Debug)]
@@ -50,7 +45,7 @@ fn search(meganes: &Vec<Megane>, target: Vec<String>) -> Option<Megane> {
 
 fn watch(mut data: Vec<String>, meganes: &Vec<Megane>) -> Option<String> {
     while data.len() > 1 {
-        dbg!(&data);
+        println!("Log: {:?}", &data);
         let mut index = data.len();
         while index > 1 {
             if let Some(matched) = search(meganes, data.get(..index)?.to_vec()) {
