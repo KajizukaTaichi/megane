@@ -33,8 +33,12 @@ fn main() {
 
         let expr = inputed.split_whitespace().map(|s| s.to_string()).collect();
         println!("Expr: {:?}", &expr);
-        let result = watch(expr, &meganes).unwrap();
-        println!("Result: {:?}", result);
+        let result = watch(expr, &meganes);
+        if let Some(result) = result {
+            println!("Result: {:?}", result);
+        } else {
+            println!("No result");
+        }
     }
 }
 
@@ -51,6 +55,7 @@ fn search(meganes: &Vec<Megane>, target: Vec<String>) -> Option<Megane> {
 fn watch(mut expr: Vec<String>, meganes: &Vec<Megane>) -> Option<String> {
     while expr.len() > 1 {
         let mut index = expr.len();
+        let mut is_solution = false;
         while index > 1 {
             if let Some(matched) = search(meganes, expr.get(..index)?.to_vec()) {
                 print!("Log: {:?}　-> ", &expr);
@@ -61,10 +66,14 @@ fn watch(mut expr: Vec<String>, meganes: &Vec<Megane>) -> Option<String> {
                     .map(|s| s.to_string())
                     .collect::<Vec<String>>();
                 println!("{:?}", &expr);
+                is_solution = true;
                 break;
             } else {
                 index -= 1;
             }
+        }
+        if !is_solution {
+            return None;
         }
     }
     Some(expr[0].clone())
