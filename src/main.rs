@@ -62,8 +62,9 @@ fn watch(mut expr: Vec<String>, meganes: &Vec<Megane>) -> Option<String> {
                     .collect::<Vec<String>>();
                 println!("{:?}", &expr);
                 break;
+            } else {
+                index -= 1;
             }
-            index -= 1;
         }
     }
     Some(expr[0].clone())
