@@ -5,12 +5,7 @@ fn main() {
     println!("(c) 2024 梶塚太智 All rights reversed.\n");
     let mut rl = DefaultEditor::new().unwrap();
 
-    println!("Input data to be used");
-    let inputed = rl.readline("> ").unwrap().trim().to_string();
-    let data = inputed.split_whitespace().map(|s| s.to_string()).collect();
-    println!("Data: {:?}", &data);
-
-    println!("Input meganes to processing the data");
+    println!("Input meganes that defines rule");
     let mut meganes = vec![];
     loop {
         let inputed = rl.readline("> ").unwrap().trim().to_string();
@@ -27,10 +22,20 @@ fn main() {
             after: inputed[1].trim().to_string(),
         });
     }
-    println!("Meganes: {:?}", &meganes);
 
-    let result = watch(data, &meganes).unwrap();
-    println!("Result: {:?}", result);
+    println!("Meganes: {:?}", &meganes);
+    loop {
+        println!("Input expr to be used");
+        let inputed = rl.readline("> ").unwrap().trim().to_string();
+        if inputed.is_empty() {
+            break;
+        }
+
+        let expr = inputed.split_whitespace().map(|s| s.to_string()).collect();
+        println!("Expr: {:?}", &expr);
+        let result = watch(expr, &meganes).unwrap();
+        println!("Result: {:?}", result);
+    }
 }
 
 #[derive(Clone, Debug)]
@@ -43,15 +48,15 @@ fn search(meganes: &Vec<Megane>, target: Vec<String>) -> Option<Megane> {
     Some(meganes[meganes.iter().position(|x| x.before == target)?].clone())
 }
 
-fn watch(mut data: Vec<String>, meganes: &Vec<Megane>) -> Option<String> {
-    while data.len() > 1 {
-        println!("Log: {:?}", &data);
-        let mut index = data.len();
+fn watch(mut expr: Vec<String>, meganes: &Vec<Megane>) -> Option<String> {
+    while expr.len() > 1 {
+        println!("Log: {:?}", &expr);
+        let mut index = expr.len();
         while index > 1 {
-            if let Some(matched) = search(meganes, data.get(..index)?.to_vec()) {
-                data = data
+            if let Some(matched) = search(meganes, expr.get(..index)?.to_vec()) {
+                expr = expr
                     .join("\0")
-                    .replace(&data[..index].join("\0"), &matched.after)
+                    .replace(&expr[..index].join("\0"), &matched.after)
                     .split("\0")
                     .map(|s| s.to_string())
                     .collect::<Vec<String>>();
@@ -60,5 +65,5 @@ fn watch(mut data: Vec<String>, meganes: &Vec<Megane>) -> Option<String> {
             index -= 1;
         }
     }
-    Some(data[0].clone())
+    Some(expr[0].clone())
 }
