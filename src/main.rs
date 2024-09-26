@@ -12,15 +12,17 @@ fn main() {
         if inputed.is_empty() {
             break;
         }
-        let inputed: Vec<&str> = inputed.split("=").collect();
-        meganes.push(Megane {
-            before: inputed[0]
-                .trim()
-                .split_whitespace()
-                .map(|s| s.to_string())
-                .collect(),
-            after: inputed[1].trim().to_string(),
-        });
+        for inputed in inputed.split(";") {
+            let inputed: Vec<&str> = inputed.split("=").collect();
+            meganes.push(Megane {
+                before: inputed[0]
+                    .trim()
+                    .split_whitespace()
+                    .map(|s| s.to_string())
+                    .collect(),
+                after: inputed[1].trim().to_string(),
+            });
+        }
     }
 
     println!("Meganes: {:?}", &meganes);
