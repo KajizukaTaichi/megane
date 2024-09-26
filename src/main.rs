@@ -1,7 +1,7 @@
 use rustyline::DefaultEditor;
 
 fn main() {
-    println!("Megane: array-oriented computing model");
+    println!("Megane: array-oriented rewrite computing model");
     println!("(c) 2024 梶塚太智 All rights reversed.\n");
     let mut rl = DefaultEditor::new().unwrap();
 
