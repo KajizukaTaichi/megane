@@ -27,7 +27,7 @@ fn main() {
 
     println!("Meganes: {:?}", &meganes);
     loop {
-        println!("Input expression to processing");
+        println!("Input expression to watching");
         let inputed = rl.readline("> ").unwrap().trim().to_string();
         if inputed.is_empty() {
             break;
